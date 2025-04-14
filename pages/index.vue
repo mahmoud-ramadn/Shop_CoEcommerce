@@ -1,13 +1,13 @@
 <template>
   <div>
     <hero />
-    <parenters />
-    <new-arraivel />
-    <top-selling />
+    <lazy-parenters />
+    <lazy-new-arraivel />
+    <lazy-top-selling />
     <div class="px-4">
-      <browse-by-dress-styl />
+      <lazy-browse-by-dress-styl />
     </div>
-    <our-happy-customers />
+    <lazy-our-happy-customers />
   </div>
 </template>
 

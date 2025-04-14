@@ -42,6 +42,15 @@
 </template>
 
 <script setup lang="ts">
+useSeoMeta({
+  title: 'cart',
+  description: 'Review and manage items in your shopping cart. Proceed to checkout or continue shopping.',
+  ogTitle: 'Your Shopping Cart | Store Name',
+  ogDescription: 'Review and manage items in your shopping cart at Store Name',
+  ogUrl: 'cart',
+  ogType: 'website',
+  robots: 'noindex' // For user-specific carts
+})
 const count=ref(1)
 
 </script>

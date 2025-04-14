@@ -2,8 +2,8 @@
   <div class="container">
     <bread-cram category="men" current-page="shope" product="T-Shirt" />
     <product-deatails/>
-    <the-tap-sections/>
-    <you-might-alsolike />
+    <lazy-the-tap-sections/>
+    <lazy-you-might-alsolike />
   </div>
 </template>
 
