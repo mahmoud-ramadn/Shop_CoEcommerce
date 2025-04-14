@@ -1,6 +1,8 @@
 <template>
   <div class="container px-0">
-    <bread-cram current-page="Casual" />
+    <span class=" px-4">
+      <bread-cram current-page="Casual" />
+  </span>
     <div class="grid lg:grid-cols-4 md:gap-x-5">
       <!-- Mobile filter toggle button -->
       <div class="md:hidden flex justify-end px-4 mb-4 col-span-full">
