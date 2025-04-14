@@ -18,7 +18,7 @@
 
       <!-- Filter panel -->
       <div 
-        class=" md:col-span-4 lg:col-span-1 md:py-5    border h-fit rounded-xl p-5"
+        class=" md:col-span-4 lg:col-span-1 md:py-5    border  h-full rounded-xl p-5"
         :class="{
           'hidden md:block': !filterPanelVisible,
           'fixed inset-0 z-50 bg-white overflow-y-auto md:static md:z-auto md:overflow-y-visible': filterPanelVisible
