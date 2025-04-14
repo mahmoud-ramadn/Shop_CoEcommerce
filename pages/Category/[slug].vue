@@ -1,9 +1,9 @@
 <template>
-  <div class="container">
+  <div class="container px-0">
     <bread-cram current-page="Casual" />
     <div class="grid lg:grid-cols-4 md:gap-x-5">
       <!-- Mobile filter toggle button -->
-      <div class="md:hidden flex justify-end mb-4 col-span-full">
+      <div class="md:hidden flex justify-end px-4 mb-4 col-span-full">
         <button 
           @click="toggleFilterPanel"
           class="flex items-center gap-2 px-4 py-2 border rounded-lg"
@@ -18,7 +18,7 @@
 
       <!-- Filter panel -->
       <div 
-        class=" md:col-span-4 lg:col-span-1 md:py-5   border h-fit rounded-xl p-5"
+        class=" md:col-span-4 lg:col-span-1 md:py-5    border h-fit rounded-xl p-5"
         :class="{
           'hidden md:block': !filterPanelVisible,
           'fixed inset-0 z-50 bg-white overflow-y-auto md:static md:z-auto md:overflow-y-visible': filterPanelVisible
@@ -234,8 +234,8 @@
 
       <!-- Product grid -->
       <div class="md:col-span-3 md:mb-20 mb-12">
-        <div
-          class="flex md:justify-between justify-center gap-2 items-center md:pb-6 pb-7"
+         <div
+          class="flex  justify-around    w-full items-center md:pb-6 pb-7"
         >
           <h2 class="font-bold md:text-4xl text-2xl">Casual</h2>
           <div class="flex items-center gap-2">
@@ -258,7 +258,7 @@
           </div>
         </div>
         <div
-          class="grid grid-cols-2 md:gap-5 border-b md:pb-8 pb-6 gap-3 md:grid-cols-3"
+          class="grid grid-cols-2 md:gap-5 border-b md:pb-8 pb-6 md:px-0 px-3  overflow-hidden gap-3 md:grid-cols-3"
         >
           <card-product
             v-for="product in filteredProducts"
