@@ -3,7 +3,7 @@
     <span class=" px-4">
       <bread-cram current-page="Casual" />
   </span>
-    <div class="grid lg:grid-cols-4 md:gap-x-5">
+    <div class="grid lg:grid-cols-6  md:grid-cols-2 grid-cols-1 md:gap-x-5">
       <!-- Mobile filter toggle button -->
       <div class="md:hidden flex justify-end px-4 mb-4 col-span-full">
         <button 
@@ -20,7 +20,7 @@
 
       <!-- Filter panel -->
       <div 
-        class=" md:col-span-4 lg:col-span-1 md:py-5    border  h-full rounded-xl p-5"
+        class=" md:col-span-2 lg:col-span-2 md    border  md:h-fit h-full rounded-xl px-3"
         :class="{
           'hidden md:block': !filterPanelVisible,
           'fixed inset-0 z-50 bg-white overflow-y-auto md:static md:z-auto md:overflow-y-visible': filterPanelVisible
@@ -235,7 +235,7 @@
       </div>
 
       <!-- Product grid -->
-      <div class="md:col-span-3 md:mb-20 mb-12">
+      <div class="md:col-span-2 lg:col-span-4 md:mb-20 mb-12">
          <div
           class="flex  justify-around    w-full items-center md:pb-6 pb-7"
         >
