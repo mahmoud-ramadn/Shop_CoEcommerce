@@ -1,5 +1,5 @@
 <template>
-  <div class="w-fit">
+  <div class="w-fit ">
     <div class="bg-gray-100 rounded-3xl overflow-hidden mb-4  aspect-square">
       <img 
         :src="image" 
@@ -8,7 +8,7 @@
         loading="lazy"
       >
     </div>
-    <h3 class="text-xl font-bold mb-2 line-clamp-2">{{ name }}</h3>
+    <h3 class="text-xl font-bold mb-2 line-clamp-1 ">{{ name }}</h3>
     <div class="flex items-center gap-1 mb-2">
       <div class="flex">
         <Icon 

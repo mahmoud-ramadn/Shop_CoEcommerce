@@ -37,10 +37,14 @@
         
       </ClientOnly>
     </div>
+      <!-- <h1 v-if="pending" class=" font-bold text-3xl  text-red-100 animate-pulse">loading...</h1>
+    <pre v-else>{{ data }}</pre> -->
   </div>
 </template>
 
 <script setup lang="ts">
+const {data,pending}=await useProducts()
+
   const containerRef = ref(null)
 const swiper = useSwiper(containerRef)
 
@@ -82,6 +86,13 @@ const CardsText = [
     img: tshirtImage,
     color: 'bg-[#07A2BB]'
   },
+  {
+    id: '6',
+    title: "Modern Hiring Practices",
+    des: 'Stay ahead with our innovative recruitment strategies.',
+    img: tshirtImage,
+    color: 'bg-[#07A2BB]'
+  },
   
 ];
 
@@ -107,14 +118,15 @@ const breakpoints = {
     spaceBetween: 20
   },
   1280: {
-    slidesPerView: 2.5,
+    slidesPerView: 4.5,
     spaceBetween: 20,
 
 
   },
   1700: {
-    slidesPerView: 4,
+    slidesPerView: 4.5,
     spaceBetween: 20,
+
 
 
   }

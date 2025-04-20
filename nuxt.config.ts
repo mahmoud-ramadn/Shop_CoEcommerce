@@ -15,10 +15,20 @@ export default defineNuxtConfig({
       ],
     },
   },
-
-  modules: ["@nuxtjs/tailwindcss", "nuxt-swiper", "shadcn-nuxt", "@nuxtjs/svg-sprite", "@nuxt/icon"],
+  runtimeConfig: {
+    public: {
+      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL,
+    },
+  },
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "nuxt-swiper",
+    "shadcn-nuxt",
+    "@nuxtjs/svg-sprite",
+    "@nuxt/icon",
+  ],
   svgSprite: {
-  input:" ~/assets/sprite/svg"
+    input: " ~/assets/sprite/svg",
   },
 
   tailwindcss: {
@@ -28,5 +38,4 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: "2025-04-08",
-
 });

@@ -8,9 +8,11 @@
       <lazy-browse-by-dress-styl />
     </div>
     <lazy-our-happy-customers />
+
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+</script>
 
 <style scoped></style>
