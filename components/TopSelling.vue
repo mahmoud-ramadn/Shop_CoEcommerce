@@ -21,9 +21,9 @@
         </swiper-container>
       </ClientOnly>
 
-    <Button class="rounded-full border md:text-base text-sm font-medium shadow-sm py-4 px-20 md:w-fit w-full mx-auto">
+    <button class="rounded-full border md:text-base text-sm font-medium shadow-sm py-4 px-20 md:w-fit w-full mx-auto">
       View All
-    </Button>
+    </button>
   </div>
 </template>
 

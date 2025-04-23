@@ -10,7 +10,7 @@
         <span class=" md:block hidden ">
             <the-select-menu  />
         </span>
-        <Button class=" rounded-full bg-black md:text-base text-sm text-white  md:px-7 px-4 py-3 w-fit shrink-0">Write a Review</Button>
+        <button class=" rounded-full bg-black md:text-base text-sm text-white  md:px-7 px-4 py-3 w-fit shrink-0">Write a Review</button>
     </div>
 </div>
 <div class=" w-full   grid md:grid-cols-2  md:gap-5  gap-4 grid-cols-1">
@@ -30,9 +30,9 @@
 
 </div>
 
- <Button class="rounded-full md:mt-8 mt-5 border md:text-base text-sm font-medium shadow-sm py-4 md:px-10  px-8 md:w-fit ">
+ <button class="rounded-full md:mt-8 mt-5 border md:text-base text-sm font-medium shadow-sm py-4 md:px-10  px-8 md:w-fit ">
 Load More Reviews
-</Button>
+</button>
 </div>
 </template>
 

@@ -10,14 +10,14 @@
           Browse through our diverse range of meticulously crafted garments, designed to bring out your individuality and cater to your sense of style.
         </p>
         
-        <Button 
+        <button 
           class="bg-black hover:bg-black/80 transition-all  text-center duration-300 text-white w-full md:w-fit font-medium rounded-full py-4 px-16 shadow-lg hover:shadow-xl "
         
         >
           <span class="flex items-center justify-center gap-2">
             Shop Now 
           </span>
-        </Button>
+        </button>
         
         <hero-counter />
       </div>

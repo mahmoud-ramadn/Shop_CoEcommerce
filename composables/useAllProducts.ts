@@ -10,13 +10,20 @@ export const useProducts = async () => {
 
 
 
-// export const useSingleArticles = async (id: number) => {
-//   const { data } = await useAPI<{ data: TArticle }>(`articles/${id}`, {
-//     server: true,
-//     lazy: true,
-//   });
-//   return { data };
-// };
+export const useSingleProduct = (id: number) => {
+  const { data, error, pending } = useAPI<TProduct>(`/products/${id}`,
+    {
+      server: false,
+      lazy:true,
+      immediate:true,
+    }
+  );
+  return {data,
+    error,
+    pending,
+  };
+};
+
 // export const useDefferntsArticles = async () => {
 //   const { data } = await useAPI<{ data: TArticle[] }>(`articles/random`, {
 //     server: true,

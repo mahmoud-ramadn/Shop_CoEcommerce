@@ -4,8 +4,8 @@
                 <h1 class="  md:basis-2/3 w-full  md:pr-32 font-bold md:text-5xl text-4xl text-white ">STAY UPTO DATE ABOUT OUR LATEST OFFERS</h1>
                 <div class=" md:basis-1/3 w-full   space-y-6 ">
                     
-                           <Input class=" bg-white  flex items-center justify-center  font-medium md:text-base text-sm  rounded-full md:py-5 w-full text-white py-4  md:placeholder:text-base pl-5   placeholder:text-sm" placeholder="Enter your email address"/> 
-                           <Button class=" bg-white  flex items-center justify-center   font-medium md:text-base text-sm  rounded-full md:py-5 w-full   py-4">Subscribe to Newsletter</Button>
+                           <input class=" bg-white  flex items-center justify-center  font-medium md:text-base text-sm  rounded-full md:py-5 w-full text-white py-4  md:placeholder:text-base pl-5   placeholder:text-sm" placeholder="Enter your email address"/> 
+                           <button class=" bg-white  flex items-center justify-center   font-medium md:text-base text-sm  rounded-full md:py-5 w-full   py-4">Subscribe to Newsletter</button>
     
                 </div>
             </div>

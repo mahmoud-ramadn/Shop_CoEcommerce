@@ -45,7 +45,7 @@
           <ul class="flex items-center gap-6">
             <li v-for="item in NavLinks" :key="item.id">
               <NuxtLink
-                :to="item.title.toLowerCase().replace(' ', '-')"
+               to="/"
                 class="flex items-center gap-1 hover:text-black/50 transition-all duration-300 text-sm font-medium"
               >
                 {{ item.title }}
@@ -64,7 +64,7 @@
               name="tabler:search"
               class="size-6 absolute left-4 top-1/2 -translate-y-1/2 text-black/40"
             />
-            <Input
+            <input
               type="search"
               placeholder="Search for products..."
               class="py-2.5 px-11 rounded-full focus:ring-2 focus:outline-none w-full focus:ring-black/90 bg-gray-100 text-sm"
@@ -103,7 +103,7 @@
             name="tabler:search"
             class="size-5 absolute left-4 top-1/2 -translate-y-1/2 text-black/40"
           />
-          <Input
+          <input
             type="search"
             placeholder="Search for products..."
             class="py-2.5 px-11 rounded-full   outline-none border-none  focus:ring-4 focus:ring-blue-300 max-w-[557px]  w-full   bg-gray-100 text-sm"
@@ -118,7 +118,7 @@
         <ul class="py-2 px-4 border-t">
           <li v-for="item in NavLinks" :key="item.id" >
             <NuxtLink
-              :to="item.title.toLowerCase().replace(' ', '-')"
+              to="/"
               class="block py-3 px-2  rounded-md text-sm font-medium"
               @click="mobileMenuOpen = false"
             >
