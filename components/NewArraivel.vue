@@ -8,7 +8,7 @@
         <button @click="retryLoading" class="mt-4 text-blue-500 underline">Retry</button>
       </div>
 
-      <div v-else-if="pending" class="container px-0 pt-14 pb-8">
+      <div v-if="pending" class="container px-0 pt-14 pb-8">
         <swiper-container :breakpoints="breakpoints" class="w-full">
           <swiper-slide v-for="n in skeletonCount" :key="`skeleton-${n}`">
             <div class="animate-pulse">
@@ -48,7 +48,7 @@
       </template>
     </ClientOnly>
 
-    <div class="flex gap-4 mt-4" v-if="!pending && !error && data?.products?.length">
+    <div class="flex gap-4 mt-4" v-if="!pending && !error && product.length">
       <button
         v-if="hasMoreItems && visibleProducts.length > initialItemCount"
         type="button" 
@@ -76,11 +76,9 @@ const itemsPerLoad = 4;
 const skeletonCount = 4;
 
 const swiperEl = ref(null);
-
-const { data, pending, error,refresh } = await useProducts()
-
-const visibleProducts = ref(data.value?.products?.slice(0, initialItemCount) || []);
-const totalProducts = computed(() => data.value?.products?.length || 0);
+const { product, pending, error,refresh } = await useProducts()
+const visibleProducts = ref(product.slice(0, initialItemCount) || []);
+const totalProducts = computed(() => product.length || 0);
 const hasMoreItems = computed(() => visibleProducts.value.length < totalProducts.value);
 
 const retryLoading = async () => {
@@ -91,14 +89,14 @@ const loadMoreItems = () => {
   if (!hasMoreItems.value) return;
   
   const currentLength = visibleProducts.value.length;
-  const newItems = data.value?.products?.slice(currentLength, currentLength + itemsPerLoad) || [];
+  const newItems = product.slice(currentLength, currentLength + itemsPerLoad) || [];
   visibleProducts.value = [...visibleProducts.value, ...newItems];
   
   updateSwiper();
 };
 
 const resetItems = () => {
-  visibleProducts.value = data.value?.products?.slice(0, initialItemCount) || [];
+  visibleProducts.value = product?.slice(0, initialItemCount) || [];
   updateSwiper();
 };
 

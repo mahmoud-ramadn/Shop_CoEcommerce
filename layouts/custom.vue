@@ -1,8 +1,6 @@
 <template>
-    <div class=" bg-[#0E0C15] min-h-screen py-6   overflow-hidden ">
-      <TheHeader/>
+    <div class="overflow-hidden ">
       <slot/>
-      <TheFooter/>
     </div>
 </template>
 

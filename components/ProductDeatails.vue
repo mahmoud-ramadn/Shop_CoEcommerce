@@ -4,13 +4,13 @@
         <div class="  md:basis-1/4  w-full   md:h-full  rounded col-span-1  flex md:flex-col justify-between flex-row  md:gap-4   gap-3  ">
            <div v-for="(img,index) in data?.images" :key="index" class=" rounded-xl  basis-1/3  border" :class="{' border-2  border-gray-950': selectedImageIndex === index}"
         @click="selectImage(index)">
-            <img :src="img" alt="produc_img"   class=" shrink-0 w-full rounded  object-cover h-full " loading='lazy'>
+            <img :src="img" alt="produc_img"   class=" shrink-0 w-full rounded  object-cover h-full " >
 
            </div>
           
         </div>
         <div class="   md:basis-3/4 w-full  md:h-full   overflow-hidden rounded-xl ">
-            <img   :src="currentImage"  alt="produc_img"  loading="lazy" class=" shrink-0 w-full rounded md:aspect-square  aspect-[3/4] object-cover h-full ">
+            <img   :src="currentImage"  alt="produc_img"  class=" shrink-0 w-full rounded md:aspect-square  aspect-[3/4] object-cover h-full ">
         </div>
 
 

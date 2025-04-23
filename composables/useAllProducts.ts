@@ -1,11 +1,11 @@
 
 export const useProducts = async () => {
   const { data,pending,error ,refresh} = await useAPI<{data : TProduct[]}>("/products", {
-    server: false,
-    lazy: true,
+    server: true,
+    lazy: false,
     immediate:true,
   });
-  return { data,pending,error,refresh };
+  return { product:data.value?.products as TProduct[],pending,error,refresh };
 };
 
 
@@ -13,7 +13,7 @@ export const useProducts = async () => {
 export const useSingleProduct = (id: number) => {
   const { data, error, pending } = useAPI<TProduct>(`/products/${id}`,
     {
-      server: false,
+      server:false,
       lazy:true,
       immediate:true,
     }
