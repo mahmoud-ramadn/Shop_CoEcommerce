@@ -5,7 +5,6 @@
         :src="image" 
         :alt="name" 
         class="w-full h-full object-cover"
-        loading="lazy"
       >
     </div>
     <h3 class="text-xl font-bold mb-2 line-clamp-1 ">{{ name }}</h3>

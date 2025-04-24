@@ -4,7 +4,7 @@
         <div class="  md:basis-1/4  w-full   md:h-full  rounded col-span-1  flex md:flex-col justify-between flex-row  md:gap-4   gap-3  ">
            <div v-for="(img,index) in data?.images" :key="index" class=" rounded-xl  basis-1/3  border" :class="{' border-2  border-gray-950': selectedImageIndex === index}"
         @click="selectImage(index)">
-            <img :src="img" alt="produc_img"   class=" shrink-0 w-full rounded  object-cover h-full " >
+            <img :src="img" :alt="img+index"   loading="lazy"  class=" shrink-0 w-full rounded  object-cover h-full " >
 
            </div>
           
@@ -89,8 +89,7 @@
       </div>
       <div class=" flex items-center gap-3 md:gap-5 pt-6" >
           <div class="  basis-1/4 bg-gray-100 flex items-center justify-evenly  rounded-full md:py-4 py-3"> <Icon name="pepicons-pop:minus" class=" md:size-6  text-black size-5 cursor-pointer "  @click="()=>count--"  /><span class=" md:text-base text-sm">{{ count }}</span> <Icon name="pepicons-pop:plus" class=" md:size-6  cursor-pointer size-5 "  @click="()=>count++"  /></div>
-          <button class=" basis-3/4 bg-black text-white  rounded-full md:py-4 py-3 md:text-base tex-sm font-medium ">Add to Cart</button>
-
+          <button @click="HandleAddToCart" class=" basis-3/4 bg-black text-white  rounded-full md:py-4 py-3 md:text-base tex-sm font-medium ">Add to Cart</button>
       </div>
     </div>
   </div>
@@ -150,15 +149,21 @@
 <script setup lang="ts">
 const route=useRoute();
 const id = Number(route.params.slug);
-console.log(id);
-
+const {CartData,setProductData}=useAddToCart();
 
 const {data ,pending}= await  useSingleProduct(id  as number);
 
 
-
-console.log(data.value?.category);
-
+const HandleAddToCart=()=>{
+ 
+    const itemExists = CartData.value.some(item => item.id ==id);
+  
+  if (!itemExists) {
+    CartData.value.push(data.value);
+  } else {
+    console.log('Item already in cart:', data);
+  }
+}
 const selectedImageIndex = ref(0);
 const currentImage = computed(() => data.value?.images?.[selectedImageIndex.value]);
 

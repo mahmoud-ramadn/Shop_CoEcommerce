@@ -81,10 +81,10 @@
           >
             <Icon name="ion:cart-outline" class="size-6" />
             <span
-              v-if="cartCount > 0"
+              v-if="CartData.length > 0"
               class="absolute -top-1 -right-1 animate-bounce bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
             >
-              {{ cartCount }}
+              {{ CartData.length }}
             </span>
           </NuxtLink>
           <NuxtLink
@@ -132,6 +132,8 @@
 </template>
 
 <script setup lang="ts">
+const {CartData}=useAddToCart()
+
 const showPromo = ref(true);
 const mobileMenuOpen = ref(false);
 const cartCount = ref(3); 

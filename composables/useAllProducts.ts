@@ -3,7 +3,7 @@ export const useProducts = async () => {
   const { data,pending,error ,refresh} = await useAPI<{data : TProduct[]}>("/products", {
     server: true,
     lazy: false,
-    immediate:true,
+    immediate:true
   });
   return { product:data.value?.products as TProduct[],pending,error,refresh };
 };

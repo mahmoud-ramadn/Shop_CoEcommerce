@@ -336,6 +336,7 @@ const toggleSection = (section: keyof typeof sections) => {
 
 const filteredProducts = ref([...product]);
 
+// Filter data
 const clothesType = [
   { id: 1, type: "T-shirts" },
   { id: 2, type: "Shorts" },
