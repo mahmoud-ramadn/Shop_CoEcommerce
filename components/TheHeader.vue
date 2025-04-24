@@ -45,7 +45,7 @@
           <ul class="flex items-center gap-6">
             <li v-for="item in NavLinks" :key="item.id">
               <NuxtLink
-               to="/"
+               :to="item?.path"
                 class="flex items-center gap-1 hover:text-black/50 transition-all duration-300 text-sm font-medium"
               >
                 {{ item.title }}
@@ -118,7 +118,7 @@
         <ul class="py-2 px-4 border-t">
           <li v-for="item in NavLinks" :key="item.id" >
             <NuxtLink
-              to="/"
+              :to="item.path"
               class="block py-3 px-2  rounded-md text-sm font-medium"
               @click="mobileMenuOpen = false"
             >
@@ -136,8 +136,8 @@ const showPromo = ref(true);
 const mobileMenuOpen = ref(false);
 const cartCount = ref(3); 
 const NavLinks = [
-  { id: 1, title: "Shop", img: "iconamoon:arrow-down-2-light" },
-  { id: 2, title: "On Sale" },
+  { id: 1, title: "onSale", img: "iconamoon:arrow-down-2-light" },
+  { id: 2, title: "Category" ,path:'/Category'},
   { id: 3, title: "New Arrivals" },
   { id: 4, title: "Brands" },
 ];

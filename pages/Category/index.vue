@@ -71,19 +71,18 @@
               </p>
             </div>
             <div v-if="sections.clothesType.open" class="filter-content">
-              <div 
-                v-for="(item) in clothesType"
-                :key="item.id"
+              <div v-for="(item,index) in  new Set(product.map((item)=>item.category))"
+                :key="index"
                 class="flex items-center mb-3 last:mb-0"
               >
                 <input 
                   type="checkbox" 
-                  :id="`clothes-${item.id}`"
+                  :id="`clothes-${index}`"
                   v-model="sections.clothesType.selected"
-                  :value="item.id"
+                  :value="item"
                   class="mr-2"
                 >
-                <label :for="`clothes-${item.id}`">{{ item.type }}</label>
+                <label :for="`clothes-${index}`">{{ item }}</label>
               </div>
             </div>
           </div>
@@ -109,6 +108,7 @@
               v-if="sections.price.open" 
               v-model="priceRange"
               @change="handlePriceChange"
+              
             />
           </div>
 
@@ -221,6 +221,8 @@
               </div>
             </div>
           </div>
+
+
         </div>
 
         <Button 
@@ -233,8 +235,6 @@
           </span>
         </Button>
       </div>
-
-      <!-- Product grid -->
       <div class="md:col-span-2 lg:col-span-4 md:mb-20 mb-12">
          <div
           class="flex  justify-around    w-full items-center md:pb-6 pb-7"
@@ -242,7 +242,7 @@
           <h2 class="font-bold md:text-4xl text-2xl">Casual</h2>
           <div class="flex items-center gap-2">
             <span class="text-black/60 md:text-base text-sm shrink-0"
-              >Showing {{ filteredProducts.length }} of {{ allProducts.length }} Products :</span
+              >Showing {{ filteredProducts.length }} of {{ product.length }} Products :</span
             >
             <the-reuse-selected
               placeholder="sort by"
@@ -262,18 +262,20 @@
         <div
           class="grid grid-cols-2 md:gap-5 border-b md:pb-8 pb-6 md:px-0 px-3  overflow-hidden gap-3 md:grid-cols-3"
         >
-          <card-product
-            v-for="product in filteredProducts"
-            :key="product.id"
-            :image="product.image"
-            :name="product.name"
-            :rating="product.rating"
-            :price="product.price"
-            :color="product.color"
-            :size="product.size"
-            :category="product.category"
-            :style="product.style"
-          />
+         <nuxt-link :to="`singlProduct/${product.id}`"  :key="product.id" v-for="product in filteredProducts">
+           <card-product
+            
+             
+             :image="product.images[0]"
+             :name="product.title"
+             :rating="product.rating"
+             :price="product.price"
+             color="red"
+             size="xl"
+             :category="product.category"
+             style=""
+           />
+         </nuxt-link>
         </div>
         <div class="flex justify-center w-full pt-5">
           <the-pagenation 
@@ -288,15 +290,14 @@
 </template>
 
 <script setup lang="ts">
-import tshirtImage from "@/assets/images/clothes/image 7.png";
 
-// Filter panel state
+const {product,pending,error}= await useProducts();
+
 const filterPanelVisible = ref(false);
 const toggleFilterPanel = () => {
   filterPanelVisible.value = !filterPanelVisible.value;
 };
 
-// Filter sections state
 const sections = reactive({
   clothesType: {
     open: true,
@@ -332,20 +333,9 @@ const toggleSection = (section: keyof typeof sections) => {
   sections[section].open = !sections[section].open;
 };
 
-// Sample product data
-const allProducts = ref([
-  { id: 1, name: "T-SHIRT WITH TAPE DETAILS", rating: 3.5, price: 120, image: tshirtImage, color: '#4F4631', size: 'Medium', category: 1, style: 1 },
-  { id: 2, name: "STRIPED T-SHIRT", rating: 4.2, price: 85, image: tshirtImage, color: '#314F4A', size: 'Large', category: 1, style: 3 },
-  { id: 3, name: "DENIM SHIRT", rating: 4.0, price: 150, image: tshirtImage, color: '#F50606', size: 'Small', category: 3, style: 1 },
-  { id: 4, name: "HOODIE WITH LOGO", rating: 4.5, price: 180, image: tshirtImage, color: '#000000', size: 'X-Large', category: 4, style: 1 },
-  { id: 5, name: "FORMAL SHIRT", rating: 3.8, price: 200, image: tshirtImage, color: '#FFFFFF', size: 'Medium', category: 3, style: 2 },
-  { id: 6, name: "PARTY DRESS", rating: 4.7, price: 250, image: tshirtImage, color: '#7D06F5', size: 'Small', category: 5, style: 3 },
-  // Add more products as needed
-]);
 
-const filteredProducts = ref([...allProducts.value]);
+const filteredProducts = ref([...product]);
 
-// Filter data
 const clothesType = [
   { id: 1, type: "T-shirts" },
   { id: 2, type: "Shorts" },
@@ -412,10 +402,10 @@ const hasFiltersApplied = computed(() => activeFiltersCount.value > 0);
 
 // Apply filters
 const applyFilters = () => {
-  filteredProducts.value = allProducts.value.filter(product => {
+  filteredProducts.value = product.filter(product => {
     // Category filter
     if (sections.clothesType.selected.length > 0 && 
-        !sections.clothesType.selected.includes(product.category)) {
+        !sections.clothesType.selected.includes(product?.category)) {
       return false;
     }
     
@@ -424,23 +414,23 @@ const applyFilters = () => {
       return false;
     }
     
-    // Color filter
-    if (sections.colors.selected !== null && 
-        product.color !== circelsColor.value[sections.colors.selected].value.replace('bg-[', '').replace(']', '')) {
-      return false;
-    }
+    // // Color filter
+    // if (sections.colors.selected !== null && 
+    //     product.color !== circelsColor.value[sections.colors.selected].value.replace('bg-[', '').replace(']', '')) {
+    //   return false;
+    // }
     
-    // Size filter
-    if (sections.size.selected !== null && 
-        product.size !== circelslSizes.value[sections.size.selected].value) {
-      return false;
-    }
+    // // Size filter
+    // if (sections.size.selected !== null && 
+    //     product.size !== circelslSizes.value[sections.size.selected].value) {
+    //   return false;
+    // }
     
-    // Style filter
-    if (sections.dressStyle.selected.length > 0 && 
-        !sections.dressStyle.selected.includes(product.style)) {
-      return false;
-    }
+    // // Style filter
+    // if (sections.dressStyle.selected.length > 0 && 
+    //     !sections.dressStyle.selected.includes(product.style)) {
+    //   return false;
+    // }
     
     return true;
   });
@@ -486,7 +476,7 @@ const resetFilters = () => {
   sections.dressStyle.selected = [];
   sortOption.value = 'Most popular';
   
-  filteredProducts.value = [...allProducts.value];
+  filteredProducts.value = [...product];
 };
 
 // Watch for sort option changes
@@ -513,3 +503,14 @@ watch(sortOption, () => {
   }
 } 
 </style>
+
+
+
+
+
+
+
+
+
+
+
