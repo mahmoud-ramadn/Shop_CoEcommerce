@@ -26,6 +26,7 @@ export default defineNuxtConfig({
     "shadcn-nuxt",
     "@nuxtjs/svg-sprite",
     "@nuxt/icon",
+    "@vee-validate/nuxt",
   ],
   svgSprite: {
     input: " ~/assets/sprite/svg",

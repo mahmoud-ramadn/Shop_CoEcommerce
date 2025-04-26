@@ -1,24 +1,32 @@
 <template>
-    <div class=" grid lg:grid-cols-2 grid-cols-1 gap-y-10">
-        <div class=" md:min-h-screen  bg-yellow-100">
-            <img src="/assets/images/auth.webp" alt="auth" class=" w-full  h-full shrink-0 object-cover">
-        </div>
-        <div class=" flex items-center  h-full  justify-center">
-            <div>
-                <h1 class=" font-bold md:text-3xl text-lg ">Welcome back</h1>
-                <p class=" font-medium text-lg  text-black/60 ">Welcome back! Please enter your details.</p>
-            </div>
-        </div>
+  <div class="flex md:flex-row flex-col-reverse gap-y-10 min-h-screen">
+    <!-- Form Section -->
+    <div class="basis-1/2 flex items-center justify-center p-6">
+      <LoginForm />
     </div>
+    
+    <!-- Image Section -->
+    <div class="basis-1/2 md:min-h-screen h-64 md:h-auto bg-red-50 overflow-hidden relative">
+      <img 
+        src="~/assets/images/auth.webp" 
+        alt="Authentication illustration" 
+        class="w-full h-full object-cover" 
+        loading="lazy"
+      />
+      <div class="absolute inset-0 bg-black/20 flex items-center justify-center md:justify-end md:items-end md:p-12">
+        <div class="text-center md:text-right p-6 md:p-0">
+          <h2 class="text-white text-3xl md:text-4xl font-bold mb-4">Welcome Back</h2>
+          <p class="text-white/90 text-lg md:text-xl max-w-md">
+            Join our community of thousands of happy users and enjoy seamless experience.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
- 
- definePageMeta({
-    layout:'custom'
- })
+definePageMeta({
+  layout: 'custom'
+})
 </script>
-
-<style scoped>
-
-</style>
