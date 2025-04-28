@@ -1,5 +1,12 @@
 <template>
   <div class="flex md:flex-row flex-col-reverse gap-y-10 min-h-screen">
+
+     <NuxtLink to="/" class="absolute top-4 left-4 flex items-center gap-2 text-gray-700 hover:text-gray-900 transition duration-300 ease-in-out">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 12h3v8h6v-6h4v6h6v-8h3L12 2z"/></svg>
+        Back to
+        <span class="text-lg font-semibold">Home</span>
+     </NuxtLink>
+
     <!-- Form Section -->
     <div class="basis-1/2 flex items-center justify-center p-6">
       <LoginForm />

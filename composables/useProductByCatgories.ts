@@ -2,8 +2,8 @@
 export const useProductsByCategories = async (catgeory:string) => {
   const { data, pending, error, refresh } = await useAPI<{ data: TProduct[] }>(`products/category/${catgeory}`,
     {
-      server: false,
-      lazy: false,
+      server: true,
+      lazy: true,
       immediate: true,
     }
   );

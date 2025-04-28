@@ -1,9 +1,8 @@
-import type { string } from "yup";
 
 export const useProducts = async () => {
   const { data,pending,error ,refresh} = await useAPI<{data : TProduct[]}>("/products", {
-    server: true,
-    lazy: false,
+    server:true,
+    lazy: true,
     immediate:true
   });
   return { product:data.value?.products as TProduct[],pending,error,refresh };
@@ -25,14 +24,13 @@ export const useSingleProduct = (id: number) => {
   };
 };
 
-// composables/useSearchProduct.ts
-// composables/useSearchProduct.ts
+
 export const useSearchProduct = (query: Ref<string>) => {
   const abortController = ref<AbortController | null>(null);
   const minQueryLength = 3;
   
-  const { data, pending, error, refresh } = useFetch<{ products: TProduct[] }>(
-    'https://dummyjson.com/products/search',
+  const { data, pending, error, refresh } = useAPI<{ products: TProduct[] }>(
+    '/products/search',
     {
       server: false,
       lazy: true,

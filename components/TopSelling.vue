@@ -89,6 +89,10 @@ const retryLoading = async () => {
   await refresh();
 };
 
+onMounted(()=>{
+  retryLoading()
+  })
+
 const loadMoreItems = () => {
   if (!hasMoreItems.value) return;
   

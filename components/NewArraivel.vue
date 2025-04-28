@@ -104,7 +104,7 @@ const updateSwiper = () => {
   nextTick(() => {
     if (swiperEl.value?.swiper) {
       swiperEl.value.swiper.update();
-      swiperEl.value.swiper.slideTo( visibleProducts.value.length-4);
+      swiperEl.value.swiper.slideTo( visibleProducts.value.length - 4);
     }
   });
 };
