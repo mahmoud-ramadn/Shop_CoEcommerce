@@ -5,13 +5,16 @@ interface CartItem extends TProduct {
 }
 
 export default () => {
-  const cart = useState<CartItem[]>("cart", () => {
-    if (process.client) {
-      const savedCart = localStorage.getItem("nuxt-cart");
-      return savedCart ? (JSON.parse(savedCart) as CartItem[]) : [];
+  // Initialize with empty array, will be hydrated on client side
+  const cart = useState<CartItem[]>("cart", () => []);
+
+  // Hydrate cart from localStorage on client side
+  if (process.client) {
+    const savedCart = localStorage.getItem("nuxt-cart");
+    if (savedCart) {
+      cart.value = JSON.parse(savedCart);
     }
-    return [];
-  });
+  }
 
   const addToCart = (product: TProduct): void => {
     const existingItem = cart.value.find((item) => item.id === product.id);
@@ -55,7 +58,7 @@ export default () => {
   });
 
   return {
-    cart: readonly(cart), // Make cart read-only to prevent direct modifications
+    cart: readonly(cart),
     addToCart,
     removeFromCart,
     updateQuantity,

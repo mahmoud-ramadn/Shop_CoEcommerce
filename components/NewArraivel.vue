@@ -1,5 +1,5 @@
 <template>
-  <div class="container py-16 flex flex-col items-center border-b">
+  <div id="newArrivals" class="container py-16 flex flex-col items-center border-b">
     <ui-title title="NEW ARRIVALS" />
     
     <ClientOnly>

@@ -6,8 +6,10 @@
       <!-- Left Column - Cart Items -->
       <div v-if="cart.length" class="lg:col-span-3 md:col-span-2 border rounded-xl md:px-6 px-5 md:py-6 py-5 md:space-y-6 space-y-4">
 
-        <div v-for="product in cart" :key="product.id" class="flex items-start md:gap-x-4 gap-x-3 border-b md:pb-6 pb-4">
-          <img :src="product.images[0]" :alt="product.title" class="md:size-32 size-24 rounded-2xl shrink-0">
+        <div  v-for="product in cart" :key="product.id" class="flex items-start md:gap-x-4 gap-x-3 border-b md:pb-6 pb-4">
+          <NuxtLink :to="`singlProduct/${product.id}`" class="md:basis-1/4 w-full md:h-full rounded col-span-1 flex md:flex-col justify-between flex-row md:gap-4 gap-3">
+            <img :src="product.images[0]" :alt="product.title" class="md:size-32 size-24 rounded-2xl shrink-0">
+          </NuxtLink>
           <div class="w-full">
             <Icon name="heroicons:trash-solid" @click="removeFromCart(product.id)" style="color: #FF3333" class="size-5 cursor-pointer float-end" />
             <h1 class="font-bold md:text-lg">{{ product.title }}</h1>
@@ -37,7 +39,7 @@
       <div  v-else class="lg:col-span-3 h-fit  flex items-center  flex-col justify-center md:col-span-2 border rounded-xl md:px-6 px-5 md:py-6 py-5 md:space-y-6 space-y-4">
         <cart-empty/>
 
-        <h1 class=" text-center  font-bold text-3xl  text-purple-600">Your Cart it Empty</h1>
+        <h1 class=" text-center  font-bold text-3xl  text-green-600 ">Your Cart it Empty</h1>
 
       </div>
 

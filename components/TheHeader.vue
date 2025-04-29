@@ -45,6 +45,7 @@
             <li v-for="item in NavLinks" :key="item.id">
               <NuxtLink
                 :to="item?.path"
+                    @click="scrollToNextSection(item.section)"
                 class="flex items-center gap-1 hover:text-black/50 transition-all duration-300 text-sm font-medium"
               >
                 {{ item.title }}
@@ -212,7 +213,7 @@
             </span>
           </NuxtLink>
           <NuxtLink
-            to="/auth"
+            to="/login"
             class="p-1 rounded-full"
             aria-label="User account"
           >
@@ -374,6 +375,17 @@
 <script setup lang="ts">
 import { useDebounceFn } from '@vueuse/core';
 
+function scrollToNextSection(sectionName: string) {
+  const nextSection = document.getElementById(sectionName);
+  if (nextSection) {
+    window.scrollTo({
+      top: nextSection.offsetTop,
+      behavior: "smooth",
+    });
+  }
+}
+
+
 const { cart } = useAddToCart();
 const showPromo = ref(true);
 const mobileMenuOpen = ref(false);
@@ -382,9 +394,9 @@ const mobileSearchInput = ref<HTMLInputElement | null>(null);
 
 const NavLinks = [
   { id: 1, title: "onSale", img: "iconamoon:arrow-down-2-light" },
-  { id: 2, title: "Category", path: '/Category' },
-  { id: 3, title: "New Arrivals" },
-  { id: 4, title: "Brands" },
+  { id: 2, title: "Category", path: '/Category' , },
+  { id: 3, title: "New Arrivals" ,section:"newArrivals"},
+  { id: 4, title: "TOP SELLING" ,section:"topSelling"},
 ];
 
 // Desktop search

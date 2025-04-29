@@ -1,7 +1,7 @@
 
 <template>
-  <div class="container py-16 flex flex-col items-center border-b">
-    <ui-title title="top selling" />
+  <div id="topSelling" class="container py-16 flex flex-col items-center border-b">
+    <ui-title title="TOP SELLING" />
     
     <ClientOnly>
       <div v-if="error" class="text-center py-8">
@@ -78,7 +78,7 @@ const skeletonCount = 4;
 
 const swiperEl = ref<HTMLElement & { swiper?: any } | null>(null);
 
-const {productByCatories,pending,error,refresh}=await  useProductsByCategories('womens-bags');
+const {productByCatories,pending,error,refresh}=await  useProductsByCategories('laptops');
 
 
 const visibleProducts = ref(productByCatories?.slice(0, initialItemCount) || []);

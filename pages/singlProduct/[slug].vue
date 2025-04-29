@@ -1,13 +1,20 @@
 <template>
   <div class="container">
-    <bread-cram category="men" current-page="shope" product="T-Shirt" />
+    <!-- <pre>{{ data?.category }}</pre> -->
+    <bread-cram :category="data?.category" current-page="shope" :product="data?.title" />
     <lazy-product-deatails />
     <lazy-the-tap-sections/>
-    <!-- <lazy-you-might-alsolike /> -->
+    <lazy-you-might-alsolike />
+
+
   </div>
 </template>
 
 <script setup lang="ts">
+const route = useRoute()
+const id = Number(route.params.slug)
+const { data, pending } = await useSingleProduct(id as number)
+
 </script>
 
 <style scoped></style>

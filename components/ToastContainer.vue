@@ -33,6 +33,6 @@ const { showToast, toastMessage, toastType } = useToast()
   }
 }
 .animate-fade-in-up {
-  animation: fadeInUp 0.3s ease-out forwards;
+  animation: fadeInUp 0.2s ease-out forwards;
 }
 </style>
