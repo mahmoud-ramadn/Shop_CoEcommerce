@@ -3,7 +3,7 @@
     <bread-cram category="men" current-page="shope" product="T-Shirt" />
     <lazy-product-deatails />
     <lazy-the-tap-sections/>
-    <lazy-you-might-alsolike />
+    <!-- <lazy-you-might-alsolike /> -->
   </div>
 </template>
 

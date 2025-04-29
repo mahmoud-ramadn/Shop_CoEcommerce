@@ -5,6 +5,7 @@
     <div class="md:mt-6 mt-5 grid lg:grid-cols-5 md:grid-cols-2 grid-cols-1 gap-5">
       <!-- Left Column - Cart Items -->
       <div v-if="cart.length" class="lg:col-span-3 md:col-span-2 border rounded-xl md:px-6 px-5 md:py-6 py-5 md:space-y-6 space-y-4">
+
         <div v-for="product in cart" :key="product.id" class="flex items-start md:gap-x-4 gap-x-3 border-b md:pb-6 pb-4">
           <img :src="product.images[0]" :alt="product.title" class="md:size-32 size-24 rounded-2xl shrink-0">
           <div class="w-full">
@@ -30,6 +31,14 @@
             </div>
           </div>
         </div>
+
+        
+      </div>
+      <div  v-else class="lg:col-span-3 h-fit  flex items-center  flex-col justify-center md:col-span-2 border rounded-xl md:px-6 px-5 md:py-6 py-5 md:space-y-6 space-y-4">
+        <cart-empty/>
+
+        <h1 class=" text-center  font-bold text-3xl  text-purple-600">Your Cart it Empty</h1>
+
       </div>
 
       <!-- Right Column - Order Summary -->

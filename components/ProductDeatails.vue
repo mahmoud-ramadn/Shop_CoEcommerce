@@ -110,7 +110,6 @@
 
       <!-- Add to Cart -->
       <div class="flex items-center gap-3 md:gap-5 pt-6">
-        <product-counter :product="data?.stock" />
         <button 
             @click="handleAddToCart(data)" 
           :disabled="isAddingToCart || !data"
