@@ -4,7 +4,7 @@
     <bread-cram :category="data?.category" current-page="shope" :product="data?.title" />
     <lazy-product-deatails />
     <lazy-the-tap-sections/>
-    <lazy-you-might-alsolike />
+    <you-might-alsolike/>
 
 
   </div>

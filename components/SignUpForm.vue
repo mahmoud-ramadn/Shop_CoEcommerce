@@ -8,37 +8,79 @@
     </div>
     
     <form @submit.prevent="handleSubmit" class="space-y-5">
+      <!-- Avatar URL Input -->
+      <div class="flex flex-col items-center mb-4">
+        <div class="relative">
+          <img 
+            v-if="formData.avatar"
+            :src="formData.avatar" 
+            class="w-24 h-24 rounded-full object-cover border-2 border-gray-200"
+            @error="handleImageError"
+          />
+          <div v-else class="w-24 h-24 rounded-full bg-gray-200 flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          </div>
+        </div>
+        
+        <FormInput
+          v-model="formData.avatar"
+          label="Avatar URL"
+          type="url"
+          name="avatar"
+          placeholder="https://example.com/avatar.jpg"
+          class="mt-2 w-full"
+          :validate-on-change="true"
+          @validation="updateValidation('avatar', $event)"
+          :validator="
+            string()
+              .required('Avatar URL is required')
+              .url('Must be a valid URL')
+          "
+        />
+        <p class="mt-2 text-sm text-gray-500">
+          Enter a URL for your profile picture or use: 
+          <span 
+            class="text-red-600 cursor-pointer hover:underline"
+            @click="usePlaceholderAvatar"
+          >
+            this placeholder
+          </span>
+        </p>
+      </div>
+
       <div class="grid grid-cols-2 gap-4">
         <FormInput
-          v-model="formData.firstName" 
-          label="First Name"
+          v-model="formData.name" 
+          label="Full Name"
           type="text"
-          name="firstName"
-          placeholder="John"
+          name="name"
+          placeholder="John Doe"
           :validate-on-change="true"
-          @validation="updateValidation('firstName', $event)"
+          @validation="updateValidation('name', $event)"
           :validator="
             string()
               .required('Required')
               .min(2, 'Too short')
           "
-          autocomplete="given-name"
+          autocomplete="name"
         />
         
         <FormInput
-          v-model="formData.lastName" 
-          label="Last Name"
-          type="text"
-          name="lastName"
-          placeholder="Doe"
+          v-model="formData.password" 
+          label="Password"
+          type="password"
+          name="password"
+          placeholder="At least 8 characters"
           :validate-on-change="true"
-          @validation="updateValidation('lastName', $event)"
+          @validation="updateValidation('password', $event)"
           :validator="
             string()
               .required('Required')
-              .min(2, 'Too short')
+              .min(8, 'Min 8 characters')
           "
-          autocomplete="family-name"
+          autocomplete="new-password"
         />
       </div>
       
@@ -58,30 +100,36 @@
         autocomplete="email"
       />
       
-      <div>
+      <div class="grid grid-cols-2 gap-4">
         <FormInput
-          v-model="formData.password" 
-          label="Password"
-          type="password"
-          name="password"
-          placeholder="At least 8 characters"
+          v-model="formData.role" 
+          label="Role"
+          type="text"
+          name="role"
+          placeholder="customer"
           :validate-on-change="true"
-          @validation="updateValidation('password', $event)"
+          @validation="updateValidation('role', $event)"
           :validator="
             string()
               .required('Required')
-              .min(8, 'Min 8 characters')
-              .max(40, 'Max 40 characters')
-              .matches(/[a-z]/, 'Needs lowercase')
-              .matches(/[A-Z]/, 'Needs uppercase')
-              .matches(/[0-9]/, 'Needs number')
-              .matches(/[!@#$%^&*]/, 'Needs special char')
           "
-          autocomplete="new-password"
         />
-        <div class="mt-2 text-xs text-gray-500">
-          Use 8+ characters with uppercase, lowercase, number, and special character
-        </div>
+        
+        <FormInput
+          v-model="formData.phone" 
+          label="Phone"
+          type="tel"
+          name="phone"
+          placeholder="+1234567890"
+          :validate-on-change="true"
+          @validation="updateValidation('phone', $event)"
+          :validator="
+            string()
+              .required('Required')
+              .matches(/^\+?[0-9]{10,15}$/, 'Invalid phone number')
+          "
+          autocomplete="tel"
+        />
       </div>
       
       <div class="flex items-start mt-4">
@@ -100,6 +148,8 @@
           </label>
         </div>
       </div>
+      
+      <div v-if="apiError" class="text-red-500 text-sm mt-2">{{ apiError }}</div>
       
       <button
         type="submit"
@@ -142,21 +192,34 @@ import { string } from 'yup'
 import { ref, computed } from 'vue'
 
 const formData = ref({
-  firstName: '',
-  lastName: '',
+  name: '',
   email: '',
-  password: ''
+  password: '',
+  avatar: '',
+  role: 'customer',
+  phone: ''
 })
 
+const apiError = ref('')
 const termsAccepted = ref(false)
 const isSubmitting = ref(false)
 
 const fieldValidations = ref({
-  firstName: false,
-  lastName: false,
+  name: false,
   email: false,
-  password: false
+  password: false,
+  avatar: false,
+  role: false,
+  phone: false
 })
+
+const handleImageError = () => {
+  formData.value.avatar = 'https://api.lorem.space/image/face?w=150&h=150'
+}
+
+const usePlaceholderAvatar = () => {
+  formData.value.avatar = 'https://api.lorem.space/image/face?w=150&h=150'
+}
 
 const updateValidation = (fieldName: keyof typeof fieldValidations.value, isValid: boolean) => {
   fieldValidations.value[fieldName] = isValid
@@ -170,12 +233,27 @@ const handleSubmit = async () => {
   if (!isFormValid.value) return
 
   isSubmitting.value = true
+  apiError.value = ''
   
   try {
-    
+    const payload = {
+      ...formData.value,
+      avatar: formData.value.avatar || 'https://api.lorem.space/image/face?w=150&h=150'
+    }
+
+    const response = await $fetch("https://api.escuelajs.co/api/v1/users/", {
+      method: 'POST',
+      body: payload,
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    console.log('Registration successful:', response)
     navigateTo('/')
-  } catch (error) {
-    console.error('Signup error:', error)
+  } catch (error: any) {
+    console.error('Registration error:', error)
+    apiError.value = error.data?.message || 'Registration failed. Please try again.'
   } finally {
     isSubmitting.value = false
   }
@@ -187,13 +265,15 @@ button {
   transition: all 0.2s ease-in-out;
 }
 
-/* Smooth focus transitions for form elements */
 input, button {
   transition: box-shadow 0.2s ease;
 }
 
-/* Better focus states */
 input:focus, button:focus {
   @apply ring-2 ring-red-500 ring-opacity-50;
+}
+
+.error-message {
+  @apply text-red-500 text-sm mt-1;
 }
 </style>

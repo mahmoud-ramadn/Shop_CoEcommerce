@@ -2,6 +2,7 @@
 <template>
   <div class="container py-16 flex flex-col items-center border-b">
     <ui-title title="You might also like" />
+
     
     <ClientOnly>
       <div v-if="error" class="text-center py-8">
@@ -75,9 +76,6 @@
 const initialItemCount = 4;
 const itemsPerLoad = 4;
 const skeletonCount = 4;
-
-const swiperEl = ref<HTMLElement & { swiper?: any } | null>(null);
-
 const AllCatgories=[
   "beauty",
   "fragrances",
@@ -105,7 +103,14 @@ const AllCatgories=[
   "womens-watches"
 ]
 
-const {productByCatories,pending,error,refresh}=await  useProductsByCategories(AllCatgories[Math.floor(Math.random() * AllCatgories.length)]);
+
+const swiperEl = ref<HTMLElement & { swiper?: any } | null>(null);
+
+
+const {productByCatories,pending,error,refresh}= await useProductsByCategories(AllCatgories[Math.floor(Math.random() * AllCatgories.length)]);
+
+
+
 
 
 const visibleProducts = ref(productByCatories?.slice(0, initialItemCount) || []);
@@ -145,7 +150,7 @@ const breakpoints = {
   320: { slidesPerView: 2, spaceBetween: 15 },
   540: { slidesPerView: 2, spaceBetween: 10 },
   640: { slidesPerView: 3, spaceBetween: 15 },
-  768: { slidesPerView: 2.5, spaceBetween: 15 },
+  768: { slidesPerView: 3, spaceBetween: 15 },
   1280: { slidesPerView: 4, spaceBetween: 20 }
 };
 
