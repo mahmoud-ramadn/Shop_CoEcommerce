@@ -4,7 +4,7 @@
       <img 
         :src="image" 
         :alt="name" 
-        class="w-full h-full object-cover"
+        class="w-full h-full hover:scale-105 duration-300 transition-all delay-100 object-cover"
       >
     </div>
     <h3 class="text-xl font-bold mb-2 line-clamp-1 ">{{ name }}</h3>
