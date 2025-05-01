@@ -11,12 +11,12 @@
         </p>
         
         <button 
-          class="bg-black hover:bg-black/80 transition-all  text-center duration-300 text-white w-full md:w-fit font-medium rounded-full py-4 px-16 shadow-lg hover:shadow-xl "
+          class="bg-black hover:bg-black/80 transition-all animate-fadeInUp delay-100  hover:bg-gradient-to-r from-purple-600 to-pink-600 text-center duration-300 text-white w-full md:w-fit font-medium rounded-full py-4 px-16 shadow-lg hover:shadow-xl "
         
         >
-          <span class="flex items-center justify-center gap-2">
+          <nuxt-link to="/Category" class="flex items-center justify-center gap-2">
             Shop Now 
-          </span>
+          </nuxt-link>
         </button>
         
         <hero-counter />
