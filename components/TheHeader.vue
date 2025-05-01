@@ -357,11 +357,11 @@
         class="lg:hidden absolute w-full bg-white shadow-lg z-50"
       >
         <ul class="py-2 px-4 border-t">
-          <li v-for="item in NavLinks" :key="item.id">
+          <li           @click="mobileMenuOpen = false"           v-for="item in NavLinks" :key="item.id">
             <NuxtLink
               :to="item.path"
               class="block py-3 px-2 rounded-md text-sm font-medium"
-              @click="mobileMenuOpen = false"
+              @click="scrollToNextSection(item.section)" 
             >
               {{ item.title }}
             </NuxtLink>
