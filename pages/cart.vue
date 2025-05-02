@@ -39,8 +39,7 @@
       <div  v-else class="lg:col-span-3 h-fit  flex items-center  flex-col justify-center md:col-span-2 border rounded-xl md:px-6 px-5 md:py-6 py-5 md:space-y-6 space-y-4">
         <cart-empty/>
 
-        <h1 class=" text-center  font-bold text-3xl  text-green-600 ">Your Cart it Empty</h1>
-
+        <p class="text-center text-black/60 md:text-base text-sm">Looks like you haven't added anything to your cart yet.</p>
       </div>
 
       <!-- Right Column - Order Summary -->
