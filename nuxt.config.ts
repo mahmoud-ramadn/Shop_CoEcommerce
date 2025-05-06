@@ -14,6 +14,20 @@ export default defineNuxtConfig({
         },
       ],
     },
+    // Add loading configuration here
+    pageTransition: {
+      name: "page",
+      mode: "out-in",
+    },
+  },
+  // Add loading component configuration
+  loading: {
+    color: "#3B82F6", // blue-500
+    height: "3px",
+    throttle: 200,
+    duration: 2000,
+    continuous: true,
+    css: false,
   },
   runtimeConfig: {
     public: {
@@ -31,12 +45,9 @@ export default defineNuxtConfig({
   svgSprite: {
     input: " ~/assets/sprite/svg",
   },
-
   tailwindcss: {
-    // Disable the built-in PostCSS config
     exposeConfig: false,
     configPath: "tailwind.config.js",
   },
-
   compatibilityDate: "2025-04-08",
 });

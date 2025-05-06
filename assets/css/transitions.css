@@ -1,0 +1,61 @@
+/* Enhanced Page Transitions */
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.4s cubic-bezier(0.65, 0.05, 0.36, 1);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(20px) scale(0.98);
+}
+
+.page-enter-to,
+.page-leave-from {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Optional: Different transitions for different routes */
+.slide-left-enter-active,
+.slide-left-leave-active,
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: all 0.5s ease;
+  position: absolute;
+  width: 100%;
+}
+
+.slide-left-enter-from {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.slide-left-leave-to {
+  transform: translateX(-30%);
+  opacity: 0;
+}
+
+.slide-right-enter-from {
+  transform: translateX(-30%);
+  opacity: 0;
+}
+
+.slide-right-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+/* Fade transition for modals */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease-out;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}

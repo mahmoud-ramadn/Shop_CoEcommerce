@@ -9,3 +9,8 @@
     <NetworkToast />
   </NuxtLayout>
 </template>
+
+<style>
+/* Import your transitions */
+@import url('~/assets/css/transitions.css');
+</style>
