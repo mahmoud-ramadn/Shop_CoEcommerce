@@ -20,15 +20,6 @@ export default defineNuxtConfig({
       mode: "out-in",
     },
   },
-  // Add loading component configuration
-  loading: {
-    color: "#3B82F6", // blue-500
-    height: "3px",
-    throttle: 200,
-    duration: 2000,
-    continuous: true,
-    css: false,
-  },
   runtimeConfig: {
     public: {
       apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL,
