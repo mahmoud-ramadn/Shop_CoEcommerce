@@ -1,11 +1,18 @@
 <template>
-  <div id="newArrivals" class="container py-16 flex flex-col items-center border-b">
+  <div
+    id="newArrivals"
+    class="container py-16 flex flex-col items-center border-b"
+  >
     <ui-title title="NEW ARRIVALS" />
-    
+
     <ClientOnly>
       <div v-if="error" class="text-center py-8">
-        <p class="text-red-500">Failed to load products. Please try again later.</p>
-        <button @click="retryLoading" class="mt-4 text-blue-500 underline">Retry</button>
+        <p class="text-red-500">
+          Failed to load products. Please try again later.
+        </p>
+        <button @click="retryLoading" class="mt-4 text-blue-500 underline">
+          Retry
+        </button>
       </div>
 
       <div v-if="pending" class="container px-0 pt-14 pb-8">
@@ -24,7 +31,7 @@
       </div>
 
       <template v-else>
-        <swiper-container 
+        <swiper-container
           ref="swiperEl"
           v-bind="swiperOptions"
           :breakpoints="breakpoints"
@@ -32,7 +39,7 @@
         >
           <swiper-slide v-for="product in visibleProducts" :key="product.id">
             <NuxtLink :to="`/singlProduct/${product.id}`" class="block">
-              <card-product 
+              <card-product
                 :image="product.thumbnail"
                 :name="product.title"
                 :rating="product.rating"
@@ -51,20 +58,20 @@
     <div class="flex gap-4 mt-4" v-if="!pending && !error && product.length">
       <button
         v-if="hasMoreItems && visibleProducts.length > initialItemCount"
-        type="button" 
-        @click="resetItems" 
+        type="button"
+        @click="resetItems"
         class="rounded-full border text-sm font-medium shadow-sm py-2 px-6"
       >
         Show Less
       </button>
-      
+
       <button
-        type="button" 
-        @click="loadMoreItems" 
+        type="button"
+        @click="loadMoreItems"
         class="rounded-full border text-sm font-medium shadow-sm py-2 px-6"
         :disabled="!hasMoreItems"
       >
-        {{ hasMoreItems ? 'View More' : 'All Products Loaded' }}
+        {{ hasMoreItems ? "View More" : "All Products Loaded" }}
       </button>
     </div>
   </div>
@@ -76,10 +83,12 @@ const itemsPerLoad = 4;
 const skeletonCount = 4;
 
 const swiperEl = ref(null);
-const { product, pending, error,refresh } = await useProducts()
+const { product, pending, error, refresh } = await useProducts();
 const visibleProducts = ref(product.slice(0, initialItemCount) || []);
 const totalProducts = computed(() => product.length || 0);
-const hasMoreItems = computed(() => visibleProducts.value.length < totalProducts.value);
+const hasMoreItems = computed(
+  () => visibleProducts.value.length < totalProducts.value
+);
 
 const retryLoading = async () => {
   await refresh();
@@ -87,11 +96,12 @@ const retryLoading = async () => {
 
 const loadMoreItems = () => {
   if (!hasMoreItems.value) return;
-  
+
   const currentLength = visibleProducts.value.length;
-  const newItems = product.slice(currentLength, currentLength + itemsPerLoad) || [];
+  const newItems =
+    product.slice(currentLength, currentLength + itemsPerLoad) || [];
   visibleProducts.value = [...visibleProducts.value, ...newItems];
-  
+
   updateSwiper();
 };
 
@@ -104,7 +114,7 @@ const updateSwiper = () => {
   nextTick(() => {
     if (swiperEl.value?.swiper) {
       swiperEl.value.swiper.update();
-      swiperEl.value.swiper.slideTo( visibleProducts.value.length - 4);
+      swiperEl.value.swiper.slideTo(visibleProducts.value.length - 4);
     }
   });
 };
@@ -115,18 +125,18 @@ const breakpoints = {
   540: { slidesPerView: 2, spaceBetween: 10 },
   640: { slidesPerView: 3, spaceBetween: 15 },
   768: { slidesPerView: 2.5, spaceBetween: 15 },
-  1280: { slidesPerView: 4, spaceBetween: 20 }
+  1280: { slidesPerView: 4, spaceBetween: 20 },
 };
 
 const swiperOptions = {
   autoplay: {
     delay: 3000,
     disableOnInteraction: false,
-    pauseOnMouseEnter: true
+    pauseOnMouseEnter: true,
   },
   loop: false, // Changed to false for better pagination control
   grabCursor: true,
   centeredSlides: false,
-  slideToClickedSlide: true
+  slideToClickedSlide: true,
 };
 </script>
