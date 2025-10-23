@@ -1,9 +1,9 @@
 <template>
   <div class="container px-0">
-    <span class=" px-4">
+    <span class="px-4">
       <bread-cram current-page="Casual" />
-  </span>
-    <div class="grid lg:grid-cols-6  md:grid-cols-2 grid-cols-1 md:gap-x-5">
+    </span>
+    <div class="grid lg:grid-cols-6 md:grid-cols-2 grid-cols-1 md:gap-x-5">
       <!-- Mobile filter toggle button -->
       <div class="md:hidden flex justify-end px-4 mb-4 col-span-full">
         <button 
@@ -20,7 +20,7 @@
 
       <!-- Filter panel -->
       <div 
-        class=" md:col-span-2 lg:col-span-2 md    border  md:h-fit h-full rounded-xl px-3"
+        class="md:col-span-2 lg:col-span-2 md border md:h-fit h-full rounded-xl px-3"
         :class="{
           'hidden md:block': !filterPanelVisible,
           'fixed inset-0 z-50 bg-white overflow-y-auto md:static md:z-auto md:overflow-y-visible': filterPanelVisible
@@ -53,41 +53,70 @@
         </div>
 
         <!-- Filter sections -->
-        <div class=" w-full md:max-h-none overflow-y-auto">
-          <!-- Clothes Type -->
+        <div class="w-full md:max-h-none overflow-y-auto">
+          <!-- Search -->
+          <div class="filter-section mb-4">
+            <div class="filter-header">
+              <h1 class="font-bold text-xl mb-3">Search</h1>
+            </div>
+            <input 
+              v-model="searchQuery"
+              type="text"
+              placeholder="Search products..."
+              class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+              @keyup.enter="applyFilters"
+            />
+          </div>
+
+          <!-- Category -->
           <div class="filter-section">
             <div 
               class="filter-header"
-              @click="toggleSection('clothesType')"
+              @click="toggleSection('category')"
             >
               <p class="flex justify-between items-center text-black/60 w-full">
                 Category
                 <Icon
-                  :name="sections.clothesType.open ? 'iconamoon:arrow-up-2-bold' : 'weui:arrow-filled'"
+                  :name="sections.category.open ? 'iconamoon:arrow-up-2-bold' : 'weui:arrow-filled'"
                   width="8px"
                   height="16px"
                   style="color: #535353"
                 />
               </p>
             </div>
-            <div v-if="sections.clothesType.open" class="filter-content">
-              <div v-for="(item,index) in  new Set(product.map((item)=>item.category))"
-                :key="index"
+            <div v-if="sections.category.open" class="filter-content">
+              <div 
+                v-for="category in categories"
+                :key="category.slug"
                 class="flex items-center mb-3 last:mb-0"
               >
                 <input 
-                  type="checkbox" 
-                  :id="`clothes-${index}`"
-                  v-model="sections.clothesType.selected"
-                  :value="item"
+                  type="radio" 
+                  :id="`category-${category.slug}`"
+                  v-model="selectedCategory"
+                  :value="category.slug"
                   class="mr-2"
+                  name="category"
                 >
-                <label :for="`clothes-${index}`">{{ item }}</label>
+                <label :for="`category-${category.slug}`" class="capitalize cursor-pointer">
+                  {{ category.name }}
+                </label>
+              </div>
+              <div class="flex items-center mb-3">
+                <input 
+                  type="radio" 
+                  id="category-all"
+                  v-model="selectedCategory"
+                  value=""
+                  class="mr-2"
+                  name="category"
+                >
+                <label for="category-all" class="cursor-pointer">All Categories</label>
               </div>
             </div>
           </div>
 
-          <!-- Price -->
+          <!-- Price Range -->
           <div class="filter-section">
             <div 
               class="filter-header"
@@ -104,62 +133,39 @@
                 />
               </div>
             </div>
-            <the-slider 
-              v-if="sections.price.open" 
-              v-model="priceRange"
-              @change="handlePriceChange"
-              
-            />
-          </div>
-
-          <!-- Colors -->
-          <div class="filter-section">
-            <div 
-              class="filter-header"
-              @click="toggleSection('colors')"
-            >
-              <div class="w-full flex justify-between items-center">
-                <h1 class="font-bold text-xl">Colors</h1>
-                <Icon
-                  :name="sections.colors.open ? 'iconamoon:arrow-up-2-bold' : 'weui:arrow-filled'"
-                  width="8px"
-                  height="16px"
-                  style="color: #535353"
-                  class="cursor-pointer"
-                />
-              </div>
-            </div>
-            <div v-if="sections.colors.open" class="filter-content">
-              <div class="flex items-center flex-wrap justify-between gap-2 mt-3">
-                <div
-                  v-for="(item, index) in circelsColor"
-                  :key="index"
-                  @click="selectColor(index)"
-                  class="size-10 rounded-full flex items-center border justify-center cursor-pointer"
-                  :class="[item.value, { 'ring-2 ring-offset-2 ring-black': selectedColorIndex === index }]"
-                >
-                  <Icon
-                    v-if="selectedColorIndex === index"
-                    name="icon-park-solid:correct"
-                    width="13px"
-                    height="13px"
-                    style="color: #fff"
+            <div v-if="sections.price.open" class="filter-content">
+              <div class="space-y-3 mt-3">
+                <div class="flex gap-2 items-center">
+                  <input 
+                    v-model.number="priceMin"
+                    type="number"
+                    placeholder="Min"
+                    class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                    min="0"
+                  />
+                  <span>-</span>
+                  <input 
+                    v-model.number="priceMax"
+                    type="number"
+                    placeholder="Max"
+                    class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                    min="0"
                   />
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Size -->
+          <!-- Sort By -->
           <div class="filter-section">
             <div 
               class="filter-header"
-              @click="toggleSection('size')"
+              @click="toggleSection('sort')"
             >
               <div class="w-full flex justify-between items-center">
-                <h1 class="font-bold text-xl">Size</h1>
+                <h1 class="font-bold text-xl">Sort By</h1>
                 <Icon
-                  :name="sections.size.open ? 'iconamoon:arrow-up-2-bold' : 'weui:arrow-filled'"
+                  :name="sections.sort.open ? 'iconamoon:arrow-up-2-bold' : 'weui:arrow-filled'"
                   width="8px"
                   height="16px"
                   style="color: #535353"
@@ -167,122 +173,125 @@
                 />
               </div>
             </div>
-            <div v-if="sections.size.open" class="filter-content">
-              <div class="flex items-center flex-wrap gap-3 mt-3">
-                <span
-                  v-for="(item, index) in circelslSizes"
-                  :key="index"
-                  @click="selectSize(index)"
-                  class="rounded-full md:py-3 md:px-6 py-2 px-5 cursor-pointer"
-                  :class="{
-                    'bg-black text-white': selectedSizeIndex === index,
-                    'text-black/60 bg-gray-100': selectedSizeIndex !== index
-                  }"
-                >
-                  <span class="md:text-base tex-sm">
-                    {{ item.value }}
-                  </span>
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Dress Style -->
-          <div class="filter-section">
-            <div 
-              class="filter-header"
-              @click="toggleSection('dressStyle')"
-            >
-              <div class="w-full flex justify-between items-center">
-                <h1 class="font-bold text-xl">Dress Style</h1>
-                <Icon
-                  :name="sections.dressStyle.open ? 'iconamoon:arrow-up-2-bold' : 'weui:arrow-filled'"
-                  width="8px"
-                  height="16px"
-                  style="color: #535353"
-                  class="cursor-pointer"
-                />
-              </div>
-            </div>
-            <div v-if="sections.dressStyle.open" class="filter-content">
+            <div v-if="sections.sort.open" class="filter-content">
               <div 
-                v-for="(item) in DressStyle"
-                :key="item.id"
+                v-for="option in sortOptions"
+                :key="option.value"
                 class="flex items-center mb-3 last:mb-0"
               >
                 <input 
-                  type="checkbox" 
-                  :id="`style-${item.id}`"
-                  v-model="sections.dressStyle.selected"
-                  :value="item.id"
+                  type="radio" 
+                  :id="`sort-${option.value}`"
+                  v-model="sortBy"
+                  :value="option.value"
                   class="mr-2"
+                  name="sort"
                 >
-                <label :for="`style-${item.id}`">{{ item.type }}</label>
+                <label :for="`sort-${option.value}`" class="cursor-pointer">
+                  {{ option.label }}
+                </label>
               </div>
             </div>
           </div>
-
-
         </div>
 
-        <Button 
+        <button
           @click="applyFilters"
-          class="rounded-full bg-black text-white md:text-lg py-4 font-bold w-full md:mt-6 mt-5"
+          :disabled="isLoading"
+          class="rounded-full bg-black text-white md:text-lg py-4 font-bold w-full md:mt-6 mt-5 disabled:opacity-50"
         >
-          Apply filter
-          <span v-if="activeFiltersCount > 0" class="ml-2">
-            ({{ activeFiltersCount }})
+          <span v-if="isLoading" class="flex items-center justify-center gap-2">
+            <Icon name="eos-icons:loading" class="animate-spin" />
+            Loading...
           </span>
-        </Button>
+          <span v-else>
+            Apply Filters
+            <span v-if="activeFiltersCount > 0" class="ml-2">
+              ({{ activeFiltersCount }})
+            </span>
+          </span>
+        </button>
       </div>
+
+      <!-- Products Grid -->
       <div class="md:col-span-2 lg:col-span-4 md:mb-20 mb-12">
-         <div
-          class="flex  justify-around    w-full items-center md:pb-6 pb-7"
-        >
-          <h2 class="font-bold md:text-4xl text-2xl">Casual</h2>
+        <div class="flex justify-between w-full items-center md:pb-6 pb-7 px-4 md:px-0">
+          <h2 class="font-bold md:text-4xl text-2xl">
+            {{ selectedCategory ? getCategoryName(selectedCategory) : 'All Products' }}
+          </h2>
           <div class="flex items-center gap-2">
-            <span class="text-black/60 md:text-base text-sm shrink-0"
-              >Showing {{ filteredProducts.length }} of {{ product.length }} Products :</span
-            >
-            <the-reuse-selected
-              placeholder="sort by"
-              label="Sort by"
-              :items="[
-                { value: 'Most popular', label: 'Most popular' },
-                { value: 'Price: Low to High', label: 'Price: Low to High' },
-                { value: 'Price: High to Low', label: 'Price: High to Low' },
-                { value: 'Newest', label: 'Newest' },
-                { value: 'Rating', label: 'Rating' },
-              ]"
-              trigger-class="bg-transparent shadow-none border-0 outline-none"
-              v-model="sortOption"
-            />
+            <span class="text-black/60 md:text-base text-sm shrink-0">
+              {{ totalProducts }} Products
+            </span>
           </div>
         </div>
-        <div
-          class="grid grid-cols-2 md:gap-5 border-b md:pb-8 pb-6 md:px-0 px-3  overflow-hidden gap-3 md:grid-cols-3"
-        >
-         <nuxt-link :to="`singlProduct/${product.id}`"  :key="product.id" v-for="product in filteredProducts">
-           <card-product
-            
-             
-             :image="product.images[0]"
-             :name="product.title"
-             :rating="product.rating"
-             :price="product.price"
-             color="red"
-             size="xl"
-             :category="product.category"
-             style=""
-           />
-         </nuxt-link>
+
+        <!-- Loading State -->
+        <div v-if="isLoading" class="grid grid-cols-2 md:gap-5 md:px-0 px-3 gap-3 md:grid-cols-3">
+          <div v-for="n in itemsPerPage" :key="n" class="animate-pulse">
+            <div class="bg-gray-200 aspect-square rounded-lg mb-3"></div>
+            <div class="bg-gray-200 h-4 rounded mb-2"></div>
+            <div class="bg-gray-200 h-4 rounded w-2/3 mb-2"></div>
+            <div class="bg-gray-200 h-4 rounded w-1/2"></div>
+          </div>
         </div>
-        <div class="flex justify-center w-full pt-5">
-          <the-pagenation 
-            :total-items="filteredProducts.length" 
-            :items-per-page="9"
-            v-model="currentPage"
-          />
+
+        <!-- Products Grid -->
+        <div v-else-if="products.length > 0" class="grid grid-cols-2 md:gap-5 border-b md:pb-8 pb-6 md:px-0 px-3 overflow-hidden gap-3 md:grid-cols-3">
+          <nuxt-link 
+            :to="`/singlProduct/${product.id}`" 
+            :key="product.id" 
+            v-for="product in products"
+          >
+            <card-product
+              :image="product.thumbnail"
+              :name="product.title"
+              :rating="product.rating"
+              :price="product.price"
+              :category="product.category"
+            />
+          </nuxt-link>
+        </div>
+
+        <!-- Empty State -->
+        <div v-else class="text-center py-12">
+          <Icon name="mdi:package-variant-closed" class="size-16 mx-auto text-gray-300 mb-4" />
+          <h3 class="text-xl font-semibold mb-2">No products found</h3>
+          <p class="text-gray-500 mb-4">Try adjusting your filters</p>
+          <Button @click="resetFilters" class="rounded-full">
+            Reset Filters
+          </Button>
+        </div>
+
+        <!-- Pagination Component -->
+        <div v-if="!isLoading && products.length > 0 && totalProducts > itemsPerPage" class="flex justify-center w-full pt-5">
+          <Pagination 
+            v-slot="{ page }" 
+            :items-per-page="itemsPerPage" 
+            :total="totalProducts" 
+            :sibling-count="1" 
+            show-edges 
+            :default-page="currentPage"
+            @update:page="handlePageChange"
+            class="w-fit p-0"
+          >
+            <PaginationList v-slot="{ items }" class="flex items-center gap-1">
+              <PaginationFirst />
+              <PaginationPrev />
+              
+              <template v-for="(item, index) in items">
+                <PaginationListItem v-if="item.type === 'page'" :key="index" :value="item.value" as-child>
+                  <Button class="w-9 h-9 p-0" :variant="item.value === page ? 'default' : 'outline'">
+                    {{ item.value }}
+                  </Button>
+                </PaginationListItem>
+                <PaginationEllipsis v-else :key="item.type" :index="index" />
+              </template>
+              
+              <PaginationNext />
+              <PaginationLast />
+            </PaginationList>
+          </Pagination>
         </div>
       </div>
     </div>
@@ -290,207 +299,198 @@
 </template>
 
 <script setup lang="ts">
+import {
+  Pagination,
+  PaginationEllipsis,
+  PaginationFirst,
+  PaginationLast,
+  PaginationList,
+  PaginationListItem,
+  PaginationNext,
+  PaginationPrev,
+} from '../components/ui/pagination';
 
-const {product,pending,error}= await useProducts();
-
+// State
+const isLoading = ref(false);
 const filterPanelVisible = ref(false);
+const products = ref([]);
+const totalProducts = ref(0);
+const categories = ref([]);
+
+// Filter states
+const searchQuery = ref('');
+const selectedCategory = ref('');
+const priceMin = ref<number | null>(null);
+const priceMax = ref<number | null>(null);
+const sortBy = ref('');
+const currentPage = ref(1);
+const itemsPerPage = 9;
+
+// Section toggles
+const sections = reactive({
+  category: { open: true },
+  price: { open: true },
+  sort: { open: true },
+});
+
+// Sort options
+const sortOptions = [
+  { value: '', label: 'Default' },
+  { value: 'title-asc', label: 'Name: A-Z' },
+  { value: 'title-desc', label: 'Name: Z-A' },
+  { value: 'price-asc', label: 'Price: Low to High' },
+  { value: 'price-desc', label: 'Price: High to Low' },
+  { value: 'rating-asc', label: 'Rating: Low to High' },
+  { value: 'rating-desc', label: 'Rating: High to Low' },
+];
+
 const toggleFilterPanel = () => {
   filterPanelVisible.value = !filterPanelVisible.value;
 };
 
-const sections = reactive({
-  clothesType: {
-    open: true,
-    selected: [] as number[]
-  },
-  price: {
-    open: true,
-    min: 0,
-    max: 500
-  },
-  colors: {
-    open: true,
-    selected: null as number | null
-  },
-  size: {
-    open: true,
-    selected: null as number | null
-  },
-  dressStyle: {
-    open: true,
-    selected: [] as number[]
-  }
-});
-
-const priceRange = ref([0, 500]);
-const selectedColorIndex = ref<number | null>(null);
-const selectedSizeIndex = ref<number | null>(null);
-const sortOption = ref('Most popular');
-const currentPage = ref(1);
-
-// Toggle section
 const toggleSection = (section: keyof typeof sections) => {
   sections[section].open = !sections[section].open;
 };
 
-
-const filteredProducts = ref([...product]);
-
-// Filter data
-const clothesType = [
-  { id: 1, type: "T-shirts" },
-  { id: 2, type: "Shorts" },
-  { id: 3, type: "Shirts" },
-  { id: 4, type: "Hoodie" },
-  { id: 5, type: "Jeans" },
-];
-
-const DressStyle = [
-  { id: 1, type: "Casual" },
-  { id: 2, type: "Formal" },
-  { id: 3, type: "Party" },
-  { id: 4, type: "Gym" },
-];
-
-const circelsColor = ref([
-  { value: "bg-[#4F4631]" },
-  { value: "bg-[#314F4A]" },
-  { value: "bg-[#7D06F5]" },
-  { value: "bg-[#F506A4]" },
-  { value: "bg-[#FFFFFF]" },
-  { value: "bg-[#000000]" },
-  { value: "bg-[#F50606]" },
-  { value: "bg-[#06CAF5]" },
-  { value: "bg-[#00C12B]" },
-]);
-
-const circelslSizes = ref([
-  { value: "Small" },
-  { value: "X-Small" },
-  { value: "Medium" },
-  { value: "Large" },
-  { value: "X-Large" },
-]);
-
-const selectColor = (index: number) => {
-  selectedColorIndex.value = selectedColorIndex.value === index ? null : index;
-  sections.colors.selected = selectedColorIndex.value;
-};
-
-const selectSize = (index: number) => {
-  selectedSizeIndex.value = selectedSizeIndex.value === index ? null : index;
-  sections.size.selected = selectedSizeIndex.value;
-};
-
-const handlePriceChange = (values: number[]) => {
-  priceRange.value = values;
-  sections.price.min = values[0];
-  sections.price.max = values[1];
+// Get category name from slug
+const getCategoryName = (slug: string) => {
+  const category = categories.value.find(cat => cat.slug === slug);
+  return category ? category.name : slug;
 };
 
 // Count active filters
 const activeFiltersCount = computed(() => {
   let count = 0;
-  if (sections.clothesType.selected.length > 0) count++;
-  if (sections.price.min > 0 || sections.price.max < 500) count++;
-  if (sections.colors.selected !== null) count++;
-  if (sections.size.selected !== null) count++;
-  if (sections.dressStyle.selected.length > 0) count++;
+  if (searchQuery.value) count++;
+  if (selectedCategory.value) count++;
+  if (priceMin.value !== null || priceMax.value !== null) count++;
+  if (sortBy.value) count++;
   return count;
 });
 
 const hasFiltersApplied = computed(() => activeFiltersCount.value > 0);
 
+// Fetch categories on mount
+const fetchCategories = async () => {
+  try {
+    const response = await fetch('https://dummyjson.com/products/categories');
+    const data = await response.json();
+    categories.value = data;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+  }
+};
+
+// Build API URL with filters
+const buildApiUrl = () => {
+  let url = 'https://dummyjson.com/products';
+  const params = new URLSearchParams();
+
+  // Calculate skip for pagination
+  const skip = (currentPage.value - 1) * itemsPerPage;
+  params.append('limit', itemsPerPage.toString());
+  params.append('skip', skip.toString());
+
+  // Category filter
+  if (selectedCategory.value) {
+    url = `https://dummyjson.com/products/category/${selectedCategory.value}`;
+  }
+
+  // Search filter
+  if (searchQuery.value) {
+    url = 'https://dummyjson.com/products/search';
+    params.append('q', searchQuery.value);
+  }
+
+  // Sort filter
+  if (sortBy.value) {
+    const [field, order] = sortBy.value.split('-');
+    params.append('sortBy', field);
+    params.append('order', order);
+  }
+
+  return `${url}?${params.toString()}`;
+};
+
+// Fetch products with filters
+const fetchProducts = async () => {
+  isLoading.value = true;
+  
+  try {
+    const apiUrl = buildApiUrl();
+    console.log('Fetching from:', apiUrl); // Debug log
+    
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    
+    let filteredProducts = data.products || [];
+    
+    // Apply client-side price filter (API doesn't support price range)
+    if (priceMin.value !== null || priceMax.value !== null) {
+      filteredProducts = filteredProducts.filter(product => {
+        const price = product.price;
+        const minCheck = priceMin.value === null || price >= priceMin.value;
+        const maxCheck = priceMax.value === null || price <= priceMax.value;
+        return minCheck && maxCheck;
+      });
+    }
+    
+    products.value = filteredProducts;
+    totalProducts.value = data.total || filteredProducts.length;
+    
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    products.value = [];
+    totalProducts.value = 0;
+  } finally {
+    isLoading.value = false;
+  }
+};
+
 // Apply filters
-const applyFilters = () => {
-  filteredProducts.value = product.filter(product => {
-    // Category filter
-    if (sections.clothesType.selected.length > 0 && 
-        !sections.clothesType.selected.includes(product?.category)) {
-      return false;
-    }
-    
-    // Price filter
-    if (product.price < sections.price.min || product.price > sections.price.max) {
-      return false;
-    }
-    
-    // // Color filter
-    // if (sections.colors.selected !== null && 
-    //     product.color !== circelsColor.value[sections.colors.selected].value.replace('bg-[', '').replace(']', '')) {
-    //   return false;
-    // }
-    
-    // // Size filter
-    // if (sections.size.selected !== null && 
-    //     product.size !== circelslSizes.value[sections.size.selected].value) {
-    //   return false;
-    // }
-    
-    // // Style filter
-    // if (sections.dressStyle.selected.length > 0 && 
-    //     !sections.dressStyle.selected.includes(product.style)) {
-    //   return false;
-    // }
-    
-    return true;
-  });
-
-  // Apply sorting
-  applySorting();
-
+const applyFilters = async () => {
+  currentPage.value = 1; // Reset to first page
+  await fetchProducts();
+  
   // Close filter panel on mobile after applying
-  if (window.innerWidth < 768) {
+  if (typeof window !== 'undefined' && window.innerWidth < 768) {
     filterPanelVisible.value = false;
   }
 };
 
-// Apply sorting
-const applySorting = () => {
-  switch(sortOption.value) {
-    case 'Price: Low to High':
-      filteredProducts.value.sort((a, b) => a.price - b.price);
-      break;
-    case 'Price: High to Low':
-      filteredProducts.value.sort((a, b) => b.price - a.price);
-      break;
-    case 'Rating':
-      filteredProducts.value.sort((a, b) => b.rating - a.rating);
-      break;
-    // Add more sorting options as needed
-    default:
-      // Default sorting (Most popular or whatever you prefer)
-      break;
-  }
+// Handle page change
+const handlePageChange = async (page: number) => {
+  currentPage.value = page;
+  await fetchProducts();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
 // Reset all filters
-const resetFilters = () => {
-  sections.clothesType.selected = [];
-  sections.price.min = 0;
-  sections.price.max = 500;
-  priceRange.value = [0, 500];
-  sections.colors.selected = null;
-  selectedColorIndex.value = null;
-  sections.size.selected = null;
-  selectedSizeIndex.value = null;
-  sections.dressStyle.selected = [];
-  sortOption.value = 'Most popular';
+const resetFilters = async () => {
+  searchQuery.value = '';
+  selectedCategory.value = '';
+  priceMin.value = null;
+  priceMax.value = null;
+  sortBy.value = '';
+  currentPage.value = 1;
   
-  filteredProducts.value = [...product];
+  await fetchProducts();
 };
 
-// Watch for sort option changes
-watch(sortOption, () => {
-  applySorting();
+// Watch for filter changes
+watch([selectedCategory, sortBy], () => {
+  applyFilters();
+});
+
+// Initial data fetch
+onMounted(async () => {
+  await fetchCategories();
+  await fetchProducts();
 });
 </script>
 
 <style scoped>
-
-
-/* Mobile styles */
- @media (max-width: 767px) {
+@media (max-width: 767px) {
   .filter-panel {
     transition: transform 0.3s ease;
   }
@@ -502,16 +502,31 @@ watch(sortOption, () => {
   .filter-panel-enter-from, .filter-panel-leave-to {
     transform: translateX(-100%);
   }
-} 
+}
+
+.filter-section {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.filter-section:last-child {
+  border-bottom: none;
+}
+
+.filter-header {
+  cursor: pointer;
+  padding-bottom: 0.5rem;
+}
+
+.filter-content {
+  padding-top: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
 </style>
-
-
-
-
-
-
-
-
-
-
-

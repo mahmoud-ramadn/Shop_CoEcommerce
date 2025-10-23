@@ -6,6 +6,6 @@ export const useProductsByCategories = async (catgeory: string, AllCatgories: st
       immediate: true,
     }
   );
-  return { productByCatories:data.value?.products  as TProduct[], pending, error, refresh };
+  return { productByCatories:data?.value?.products  as TProduct[], pending, error, refresh };
 };
 
